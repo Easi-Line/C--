@@ -75,8 +75,12 @@ int main() {
 */
 
 
-int x = 10, y = 15;
-int z = min(x, y);
-cout << z;
+//tenary operator
+int grade = 89;
+    //grade > 50 ? cout << "You passed!" : cout << "You failed!"; 
+
+    cout << (grade > 60 ? "You passed!" : "You failed!") << "\n";
+
+
     return 0; // Return 0 to indicate successful execution
 }
