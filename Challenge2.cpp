@@ -1,157 +1,146 @@
 #include <iostream>
+#include <iomanip>
 #include <string>
 using namespace std;
 
+// Function to validate PIN
+bool verifyPIN(const string& correctPIN, const string& userPIN) {
+    return correctPIN == userPIN;
+}
+
+// Function to confirm transaction
+bool confirmTransaction() {
+    int choice;
+    cout << "Press 1 to confirm your transaction or 2 to cancel: ";
+    while (!(cin >> choice) || (choice != 1 && choice != 2)) {
+        cout << "Invalid input. Please enter 1 to confirm or 2 to cancel: ";
+        cin.clear();
+        cin.ignore(10000, '\n');
+    }
+    return choice == 1;
+}
+
+// Function to print receipt
+void printReceipt(double withdrawalAmount, double serviceCharge, double accountBalance, double creditAmount = 0.0) {
+    cout << fixed << setprecision(2); // Ensure 2 decimal places for currency
+    cout << "---------------------------------------ATM---------------------------------------\n"
+         << "Amount Withdrawn:      $" << withdrawalAmount << "\n"
+         << "Service Charge:        $" << serviceCharge << "\n"
+         << "Account Balance:       $" << accountBalance << "\n";
+    if (creditAmount != 0.0) {
+        cout << "Amount On Credit:      $" << creditAmount << "\n";
+    }
+    cout << "--------------------------------------------------------------------------------\n"
+         << "                Thank You For Using Our Services\n"
+         << "             Looking Forward To Seeing You Next Time\n";
+}
+
 int main() {
     double accountBalance = 100.00;
-    double availableBalance, withdrawalAmount, serviceCharge = (withdrawalAmount - 300) * 0.04;
-    const string pinCode = "1234"; //pin stored in the system.
-    string userPIN; // collects and stores user pin
+    double withdrawalAmount;
+    const string pinCode = "1234";
+    string userPIN;
 
-    //taking amount to withdraw from the user.
+    // Input withdrawal amount with validation
     cout << "Enter the amount you want to withdraw: $";
-    cin >> withdrawalAmount;
+    while (!(cin >> withdrawalAmount)) {
+        cout << "Invalid input. Please enter a valid amount: $";
+        cin.clear();
+        cin.ignore(10000, '\n');
+    }
 
-    //checkinh withdrawal requirement
+    // Check withdrawal requirements
     if (withdrawalAmount <= 0) {
-        cout << "The minimum amount you can withdraw is $1.00";
+        cout << "The minimum amount you can withdraw is $1.00\n";
+        return 0;
     }
-    else if (withdrawalAmount > 500) {
-        cout << "You withdraw a maximum of $500.00 per day. \n"
-        "              Thank You.";
+    if (withdrawalAmount > 500) {
+        cout << "You can withdraw a maximum of $500.00 per day.\n"
+             << "Thank You.\n";
+        return 0;
     }
+
+    // Handle withdrawal exceeding balance
+    if (withdrawalAmount > accountBalance) {
+        int choice;
+        cout << "Insufficient balance in your account.\n"
+             << "Press 1 to withdraw with a $25.00 charge or 2 to withdraw available balance: ";
+        while (!(cin >> choice) || (choice != 1 && choice != 2)) {
+            cout << "Invalid input. Please enter 1 or 2: ";
+            cin.clear();
+            cin.ignore(10000, '\n');
+        }
+
+        if (choice == 2) {
+            withdrawalAmount = accountBalance; // Adjust to available balance
+        }
+
+        // PIN verification
+        cout << "Enter your PIN to continue: ";
+        cin >> userPIN;
+        if (!verifyPIN(pinCode, userPIN)) {
+            cout << "Incorrect PIN. Please try again.\n";
+            return 0;
+        }
+
+        // Confirm transaction
+        if (!confirmTransaction()) {
+            cout << "Transaction cancelled.\n";
+            return 0;
+        }
+
+        // Process transaction
+        double serviceCharge = (choice == 1) ? 25.00 : 0.00;
+        double creditAmount = (choice == 1) ? (withdrawalAmount - accountBalance) : 0.0;
+        accountBalance -= withdrawalAmount; // Update balance
+        if (accountBalance < 0) {
+            accountBalance -= serviceCharge; // Apply service charge for overdraft
+        }
+        printReceipt(withdrawalAmount, serviceCharge, accountBalance, creditAmount);
+    }
+    // Handle withdrawal exceeding $300
     else if (withdrawalAmount > 300) {
-        cout << "You will be charged $" << (withdrawalAmount - 300) * 0.04 << " on $" << (withdrawalAmount - 300) << "\n";
+        double serviceCharge = (withdrawalAmount - 300) * 0.04;
+        cout << fixed << setprecision(2);
+        cout << "You will be charged $" << serviceCharge << " on $" << (withdrawalAmount - 300) << "\n";
+
+        // PIN verification
         cout << "Enter your PIN to continue: ";
         cin >> userPIN;
-
-        //PIN verification
-        if (pinCode == userPIN) {
-            int choice; //chosing to aprove or forfeit the transaction.
-            cout << "Press 1 to confirm your transaction or 2 to forfiet. ";
-            cin >> choice;
-
-            //Confirm transaction after PIN verification
-            switch (choice)
-            {
-            case 1:
-                cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                << "Service Charge:                                                         $" << (withdrawalAmount - 300) * 0.04 << "\n"
-                << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                << "------------------------------------------------------------------------------------------------------------------------\n"
-                << "------------------------------------------------------------------------------------------------------------------------\n"
-                << "                        Thank You For Using Our Services \n"
-                << "                     Looking To Forward To Seeing You Next Time";
-                break;
-            case 2:
-                cout << "Transaction cancelled!";
-            default:
-                break;
-            }
+        if (!verifyPIN(pinCode, userPIN)) {
+            cout << "Incorrect PIN. Please try again.\n";
+            return 0;
         }
-        else {
-            cout << "Incorrect PIN please try again.";
+
+        // Confirm transaction
+        if (!confirmTransaction()) {
+            cout << "Transaction cancelled.\n";
+            return 0;
         }
+
+        // Process transaction
+        accountBalance -= (withdrawalAmount + serviceCharge); // Update balance
+        printReceipt(withdrawalAmount, serviceCharge, accountBalance);
     }
-    else if (withdrawalAmount > accountBalance) {
-        int choice;     //holding switch value for withdrawing for credit
-        cout << "Insufficient balance in your account. Press 1 to withdraw the money for a charge of $25.00 or 2 to withdraw the amount in  your account. ";
-        cin >> choice;
-
-        //confirming credit for a charge of $25.00
-        switch (choice)
-        {
-        case 1:
-            cout << "Enter your PIN to continue: ";
-            cin >> userPIN;
-
-            if (pinCode == userPIN) {
-                int choice; //chosing to aprove or forfeit the transaction.
-                cout << "Press 1 to confirm your transaction or 2 to forfiet. ";
-                cin >> choice;
-
-                switch (choice)
-                {
-                case 1:
-                    cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                        << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                        << "Service Charge:                                                         $" << 25.00 << "\n"
-                        << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                        << "Amount On Credit:                                                       $" << accountBalance - withdrawalAmount << "\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "                            Thank You For Using Our Services \n"
-                        <<"                         Looking To Forward To Seeing You Next Time";
-                    break;
-                case 2:
-                    cout << "Transaction cancelled";
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
-        case 2:
-            cout << "Enter your PIN to continue: ";
-            cin >> userPIN;
-
-            if (pinCode == userPIN) {
-                int choice; //chosing to aprove or forfeit the transaction.
-                cout << "Press 1 to confirm your transaction or 2 to forfiet. ";
-                cin >> choice;
-
-                switch(choice) {
-                    case 1:
-                        withdrawalAmount = accountBalance;
-                        cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                            << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                            << "Service Charge:                                                         $" << "0.00 "<< "\n"
-                            << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                            << "Amount On Credit:                                                       $" << accountBalance - withdrawalAmount << "\n"
-                            << "------------------------------------------------------------------------------------------------------------------------\n"
-                            << "------------------------------------------------------------------------------------------------------------------------\n"
-                            << "                            Thank You For Using Our Services \n"
-                            <<"                         Looking To Forward To Seeing You Next Time";
-                        break;
-                    case 2:
-                        cout << "Transaction cancelled";
-                        break;
-                    default:
-                        break;
-                }
-            }
-            break;
-        default:
-            break;
-        }
-    }
+    // Handle normal withdrawal
     else {
+        // PIN verification
         cout << "Enter your PIN to continue: ";
         cin >> userPIN;
-        if (pinCode == userPIN) {
-                int choice; //chosing to aprove or forfeit the transaction.
-                cout << "Press 1 to confirm your transaction or 2 to forfiet. ";
-                cin >> choice;
-
-            switch(choice) {
-                case 1:
-                    cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                        << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                        << "Service Charge:                                                         $" << "0.00" "\n"
-                        << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                        << "Amount On Credit:                                                       $" << accountBalance - withdrawalAmount << "\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "                            Thank You For Using Our Services \n"
-                        <<"                         Looking To Forward To Seeing You Next Time";
-                case 2:
-                    cout << "Transaction cancelled";
-                        break;
-                default:
-                    break;
-            }
+        if (!verifyPIN(pinCode, userPIN)) {
+            cout << "Incorrect PIN. Please try again.\n";
+            return 0;
         }
+
+        // Confirm transaction
+        if (!confirmTransaction()) {
+            cout << "Transaction cancelled.\n";
+            return 0;
+        }
+
+        // Process transaction
+        accountBalance -= withdrawalAmount; // Update balance
+        printReceipt(withdrawalAmount, 0.00, accountBalance);
     }
 
     return 0;
