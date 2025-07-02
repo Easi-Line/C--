@@ -12,22 +12,16 @@ int main () {
 
     cout << "----------Welcome To Certified Developer's Bank----------\n";
 
-    cout << "Enter your four-digit PIN to continue.: ";
+    //while stament to check if the user has entered the correct PIN.
+    int attempts = 0; // counter for the number of attempts to enter the correct PIN
+    while(attempts < 3) {
+        cout << "Enter your four-digit PIN to continue: ";
+        cin >> userPIN;
 
-    //maximum length of the PIN is 4 digits.
-    // while(userPIN.length() != 4) {
-    //     cin >> userPIN;
-    //     if (userPIN.length() != 4) {
-    //         cout << "Invalid PIN. Please enter a four-digit PIN: ";
-    //     }
-    // }
+        if (userPIN == pinCode) {
+            cout << "PIN accepted. Proceeding to options menu...\n";
 
-    while(!(cin >> userPIN) || !(pinCode == userPIN)) {
-        cout << "Incorrect PIN. Try again: ";
-        cin.clear();
-    }
-
-    //Options menu
+            //Options menu
     cout << "1. Check Account Balance. \n"
         << "2. Deposit \n"
         << "3. Withdraw Funds. \n"
@@ -73,7 +67,7 @@ int main () {
             }
                 //getting a vlid maximum withdrawal amount 
                 while (withdrawalAmount > 500) {
-                    cout << "You can withdraw a maximum of $500.00 per day. \n" "Enter a Valid amount: $";
+                    cout << "You can withdraw a maximum of $500.00 per day. \n" "Enter an amount: $";
                     cin >> withdrawalAmount;
             }
 
@@ -173,6 +167,22 @@ int main () {
         default:
             cout << "Invalid Input. Please try again.";
 
+    }
+
+            break; // exit the loop if the PIN is correct
+        } else {
+            attempts++;
+            cout << "Incorrect PIN. You have " << (3 - attempts) << " attempts left.\n";
+        }
+        if (attempts == 3) {
+            cout << "----------Certified Developer's Bank-----------\n"
+                << "Too many incorrect attempts. Exiting the program.\n"
+                << "Please contact customer support for assistance.\n"
+                << "0257485575 or as.cyril3@gmail.com\n"
+                << "Thank you for using Certified Developer's Bank.\n"
+                << "--------------HAVE A NICE DAY--------------------";;
+            return 1; // exit the program after 3 failed attempts
+        }
     }
     
     return 0;
