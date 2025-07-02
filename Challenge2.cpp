@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <iomanip> // for std::setprecision and std::fixed
 using namespace std;
 
 int main() {
@@ -35,14 +36,15 @@ int main() {
             switch (choice)
             {
             case 1:
-                cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                << "Service Charge:                                                         $" << (withdrawalAmount - 300) * 0.04 << "\n"
-                << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                << "------------------------------------------------------------------------------------------------------------------------\n"
-                << "------------------------------------------------------------------------------------------------------------------------\n"
-                << "                        Thank You For Using Our Services \n"
-                << "                     Looking To Forward To Seeing You Next Time";
+                cout << setprecision(2) << fixed; // Set precision for currency output
+                cout << "-------------------------ATM-------------------------------------\n"
+                << "Amount Withdrawn:                           $" << withdrawalAmount << "\n"
+                << "Service Charge:                             $" << (withdrawalAmount - 300) * 0.04 << "\n"
+                << "Account Balance:                            $" << accountBalance - withdrawalAmount << "\n"
+                << "----------------------------------------------------------------------\n"
+                << "----------------------------------------------------------------------\n"
+                << "                Thank You For Using Our Services \n"
+                << "             Looking To Forward To Seeing You Next Time";
                 break;
             case 2:
                 cout << "Transaction cancelled!";
@@ -74,15 +76,16 @@ int main() {
                 switch (choice)
                 {
                 case 1:
-                    cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                        << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                        << "Service Charge:                                                         $" << 25.00 << "\n"
-                        << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                        << "Amount On Credit:                                                       $" << accountBalance - withdrawalAmount << "\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "                            Thank You For Using Our Services \n"
-                        <<"                         Looking To Forward To Seeing You Next Time";
+                    cout << setprecision(2) << fixed; // Set precision for currency output
+                    cout << "-------------------------ATM-------------------------------------\n"
+                    << "Amount Withdrawn:                       $" << withdrawalAmount << "\n"
+                    << "Service Charge:                         $" << 25.00 << "\n"
+                    << "Account Balance:                        $" << accountBalance - withdrawalAmount << "\n"
+                    << "Amount On Credit:                       $" << accountBalance - withdrawalAmount << "\n"
+                        << "------------------------------------------------------------------\n"
+                        << "------------------------------------------------------------------\n"
+                        << "             Thank You For Using Our Services \n"
+                        <<"          Looking To Forward To Seeing You Next Time";
                     break;
                 case 2:
                     cout << "Transaction cancelled";
@@ -104,15 +107,15 @@ int main() {
                 switch(choice) {
                     case 1:
                         withdrawalAmount = accountBalance;
-                        cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                            << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                            << "Service Charge:                                                         $" << "0.00 "<< "\n"
-                            << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                            << "Amount On Credit:                                                       $" << accountBalance - withdrawalAmount << "\n"
-                            << "------------------------------------------------------------------------------------------------------------------------\n"
-                            << "------------------------------------------------------------------------------------------------------------------------\n"
-                            << "                            Thank You For Using Our Services \n"
-                            <<"                         Looking To Forward To Seeing You Next Time";
+                        cout << setprecision(2) << fixed; // Set precision for currency output
+                        cout << "-------------------------ATM-------------------------------------\n"
+                            << "Amount Withdrawn:               $" << withdrawalAmount << "\n"
+                            << "Account Balance:                $" << accountBalance - withdrawalAmount << "\n"
+                            << "Amount On Credit:               $" << accountBalance - withdrawalAmount << "\n"
+                            << "------------------------------------------------------------------\n"
+                            << "------------------------------------------------------------------\n"
+                            << "              Thank You For Using Our Services \n"
+                            <<"           Looking To Forward To Seeing You Next Time";
                         break;
                     case 2:
                         cout << "Transaction cancelled";
@@ -136,15 +139,16 @@ int main() {
 
             switch(choice) {
                 case 1:
-                    cout << "---------------------------------------ATM-----------------------------------------------------------------------------\n"
-                        << "Amount Withdrawn:                                                       $" << withdrawalAmount << "\n"
-                        << "Service Charge:                                                         $" << "0.00" "\n"
-                        << "Account Balance:                                                        $" << accountBalance - withdrawalAmount << "\n"
-                        << "Amount On Credit:                                                       $" << accountBalance - withdrawalAmount << "\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "------------------------------------------------------------------------------------------------------------------------\n"
-                        << "                            Thank You For Using Our Services \n"
-                        <<"                         Looking To Forward To Seeing You Next Time";
+                cout << setprecision(2) << fixed; // Set precision for currency output
+                    cout << "-------------------------ATM-------------------------------------\n"
+                        << "Amount Withdrawn:               $" << withdrawalAmount << "\n"
+                        << "Service Charge:                 $" << "0.00" "\n"
+                        << "Account Balance:                $" << accountBalance - withdrawalAmount << "\n"
+                        << "Amount On Credit:               $" << accountBalance - withdrawalAmount << "\n"
+                        << "--------------------------------------------------------------------\n"
+                        << "--------------------------------------------------------------------\n"
+                        << "             Thank You For Using Our Services \n"
+                        <<"          Looking To Forward To Seeing You Next Time";
                 case 2:
                     cout << "Transaction cancelled";
                         break;
