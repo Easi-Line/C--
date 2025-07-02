@@ -4,7 +4,7 @@
 using namespace std;
 
 int main () {
-    double accountBalance =400.00, withdrawalAmount, charges;
+    double accountBalance = 1000.00, withdrawalAmount, charges;
     const double freeLimit = 300, maxWithdrawal = 500; //free limit of transactions and maximum withdrawal per day.
     double availableBalance = accountBalance - withdrawalAmount - charges;
     const string pinCode = "1234"; //pin stored in the system.
@@ -49,13 +49,13 @@ int main () {
             }
 
             //when withdrawal exceed $300.00
-            if (withdrawalAmount > freeLimit && withdrawalAmount <= accountBalance) {
-                cout << "You will be charged $" << (withdrawalAmount) * 0.04 << " on $" << withdrawalAmount << "\n";
+            if (withdrawalAmount > 300 && withdrawalAmount <= accountBalance) {
+                cout << "You will be charged $" << (withdrawalAmount - freeLimit) * 0.04 << " on $" << (withdrawalAmount - freeLimit) << "\n";
                 cout << "Press 1 to confirm the transaction. Press 2 to Terminate the transaction.: ";
                 int choice;
                 cin >> choice;
                 //calculating service charges.
-                charges = withdrawalAmount  * 0.04;
+                charges = (withdrawalAmount - freeLimit) * 0.04;
                 double availableBalance = accountBalance - withdrawalAmount - charges;
 
                 //display receipt
@@ -81,22 +81,23 @@ int main () {
             }
             //when withdrawal amount is greater than account balance
             else if (withdrawalAmount > accountBalance) {
+                withdrawalAmount = accountBalance;
                 charges = 25;
+                availableBalance = accountBalance - charges; //showing the user their account balance.
                 cout << "You don't have enough funds to complete this transaction \n"
-                    << "Your account balance is " << accountBalance << "\n"
                     "Your available balance is " << availableBalance << "\n"
                     "Select from the options below to proceed. \n"
-                    "1. Withdraw the funds for a fee of $25.00 \n"
+                    "1. Withdraw your available balance for a fee of $25.00 \n"
                     "2. Terminate the process.   ";
                 int choice;
                 cin >> choice;
 
                 switch(choice) {
                     case 1:
-                        availableBalance = accountBalance - withdrawalAmount - charges;
+                        availableBalance = accountBalance - withdrawalAmount;
                         cout << fixed << setprecision(2);
                         cout << "----------Certified Developer's Bank----------\n"
-                            << "Amount Withdrawn                   $" << withdrawalAmount << "\n"
+                            << "Amount Withdrawn                   $" << withdrawalAmount - charges << "\n"
                             << "Charges                            $" << charges << "\n"
                             << "Available Balance                  $" << availableBalance << "\n"
                             << "--------THANK YOU FOR USING OUR SERVICES--------\n";
