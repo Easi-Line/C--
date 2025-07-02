@@ -6,13 +6,22 @@ using namespace std;
 int main () {
     double accountBalance =400.00, withdrawalAmount, charges;
     const double freeLimit = 300, maxWithdrawal = 500; //free limit of transactions and maximum withdrawal per day.
-    double availableBalance = accountBalance - withdrawalAmount - charges;
+    double availableBalance = accountBalance - withdrawalAmount - charges, credit;
     const string pinCode = "1234"; //pin stored in the system.
     string userPIN;
 
     cout << "----------Welcome To Certified Developer's Bank----------\n";
 
     cout << "Enter your four-digit PIN to continue.: ";
+
+    //maximum length of the PIN is 4 digits.
+    // while(userPIN.length() != 4) {
+    //     cin >> userPIN;
+    //     if (userPIN.length() != 4) {
+    //         cout << "Invalid PIN. Please enter a four-digit PIN: ";
+    //     }
+    // }
+
     while(!(cin >> userPIN) || !(pinCode == userPIN)) {
         cout << "Incorrect PIN. Try again: ";
         cin.clear();
@@ -20,10 +29,11 @@ int main () {
 
     //Options menu
     cout << "1. Check Account Balance. \n"
-        << "2. Withdraw Funds. \n"
-        << "3. Pay Bill.\n"
-        << "4. Transaction History. \n"
-        << "Select an option (1-4) to proceed. ";
+        << "2. Deposit \n"
+        << "3. Withdraw Funds. \n"
+        << "4. Pay Bill.\n"
+        << "5. Transaction History. \n"
+        << "Select an option (1-5) to proceed. ";
     int option;
     cin >>  option;
 
@@ -33,6 +43,25 @@ int main () {
             cout << "Account Balance:                   $" << accountBalance;
             break;
         case 2:
+            double depositAmount;
+            cout << "Enter the amount you want to deposit: $";
+            cin >> depositAmount;
+
+            //getting a valid minimum deposit amount
+            while (depositAmount <= 0) {
+                cout << "The minimum amount you can deposit is $1.00 \n" "Enter a valid amount: $";
+                cin >> depositAmount;
+            }
+
+            //updating account balance after deposit
+            accountBalance += depositAmount;
+            cout << fixed << setprecision(2);
+            cout << "----------Certified Developer's Bank----------\n"
+                << "Amount Deposited                   $" << depositAmount << "\n"
+                << "New Account Balance                $" << accountBalance << "\n"
+                << "--------THANK YOU FOR USING OUR SERVICES--------\n";
+            break;
+        case 3:
             //taking amount to withdraw from the user.
             cout << "Enter the amount you want to withdraw: $";
             cin >> withdrawalAmount;
@@ -82,23 +111,30 @@ int main () {
             //when withdrawal amount is greater than account balance
             else if (withdrawalAmount > accountBalance) {
                 charges = 25;
-                cout << "You don't have enough funds to complete this transaction \n"
+                cout << "You don't have enough funds to complete this transaction. \n"
                     << "Your account balance is " << accountBalance << "\n"
-                    "Your available balance is " << availableBalance << "\n"
+                    // "Your available balance is " << accountBalance - charges << "\n"
                     "Select from the options below to proceed. \n"
                     "1. Withdraw the funds for a fee of $25.00 \n"
                     "2. Terminate the process.   ";
+
+                    availableBalance = accountBalance - withdrawalAmount - charges;
+                    if(availableBalance < 0) {
+                        credit = availableBalance; // negative balance indicates credit.
+                        availableBalance = 0; // reset available balance to zero.
+                    }
+
                 int choice;
                 cin >> choice;
 
                 switch(choice) {
                     case 1:
-                        availableBalance = accountBalance - withdrawalAmount - charges;
                         cout << fixed << setprecision(2);
                         cout << "----------Certified Developer's Bank----------\n"
                             << "Amount Withdrawn                   $" << withdrawalAmount << "\n"
                             << "Charges                            $" << charges << "\n"
                             << "Available Balance                  $" << availableBalance << "\n"
+                            << "Amount On  Credit                  $" << credit << "\n"
                             << "--------THANK YOU FOR USING OUR SERVICES--------\n";
                         break;
                     case 2:
@@ -120,17 +156,18 @@ int main () {
                     << "Amount Withdrawn                   $" << accountBalance << "\n"
                     << "Charges                            $" << charges << "\n"
                     << "Available Balance                  $" << availableBalance << "\n"
+                    << "Amount On  Credit                  $" << credit << "\n"
                     << "--------THANK YOU FOR USING OUR SERVICES--------\n";
             }
             else {
                 cout << "Invalid input";
             }
             break;
-        case 3:
+        case 4:
             cout << "UNDER CONSTRUCTION!! \n"
                 "THIS MENU WILL BE AVAILABLE SOON";
             break;
-        case 4:
+        case 5:
             cout << "UNDER CONSTRUCTION!! \n"
                 "THIS MENU WILL BE AVAILABLE SOON";
         default:
