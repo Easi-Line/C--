@@ -1,4 +1,6 @@
 #include <iostream>
+#include <iomanip>
+#include <cmath>
 #include <string>
 using namespace std;
 
@@ -73,13 +75,6 @@ int main() {
         num += 2;
     }
 */
-
-
-//tenary operator
-int grade = 89;
-    //grade > 50 ? cout << "You passed!" : cout << "You failed!"; 
-
-    cout << (grade > 60 ? "You passed!" : "You failed!") << "\n";
 
 
     return 0; // Return 0 to indicate successful execution
