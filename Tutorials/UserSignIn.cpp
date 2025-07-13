@@ -23,7 +23,7 @@ int main() {
     cin >> password;
 
     ifstream infile("userInfo.txt");
-    file.close();
+    infile.close();
 
     (username == storedUsername && password == storedPassword) ? 
         cout << "Sign-in successful!\n" : 
